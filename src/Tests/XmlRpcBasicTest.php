@@ -8,6 +8,7 @@
 namespace Drupal\xmlrpc\Tests;
 
 use Drupal\simpletest\WebTestBase;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Perform basic XML-RPC tests that do not require addition callbacks.
@@ -86,6 +87,34 @@ class XmlRpcBasicTest extends WebTestBase {
 
     foreach ($invalid_messages as $assertion) {
       $this->assertFalse(xmlrpc_message_parse($assertion['message']), $assertion['assertion']);
+    }
+  }
+
+  /**
+   * Ensure that XML-RPC correctly handles XML Accept headers.
+   */
+  protected function testAcceptHeaders() {
+    $url = \Drupal::url('xmlrpc.php', [], ['absolute' => TRUE]);
+
+    $request_header_sets = array(
+      // Default.
+      'implicit' => array(),
+      'text/xml' => array(
+        'Accept' => 'text/xml',
+      ),
+      'application/xml' => array(
+        'Accept' => 'application/xml',
+      )
+    );
+
+    foreach ($request_header_sets as $accept => $headers) {
+      try {
+        $methods = xmlrpc($url, array('system.listMethods' => array()), $headers);
+        $this->assertTrue(is_array($methods), strtr('@accept accept header is accepted', array('@accept' => $accept)));
+      }
+      catch (ClientException $e) {
+        $this->fail($e);
+      }
     }
   }
 }
