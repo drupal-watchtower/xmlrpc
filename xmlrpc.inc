@@ -565,7 +565,10 @@ function _xmlrpc($url, array $args, array $headers = array()) {
   $headers['Content-Type'] = 'text/xml';
 
   try {
-    $response = \Drupal::httpClient()->post($url, array('headers' => $headers, 'body' => $xmlrpc_request->xml));
+    $response = \Drupal::httpClient()->post($url, array(
+      'headers' => $headers,
+      'body' => $xmlrpc_request->xml,
+    ));
   }
   catch (RequestException $exception) {
     xmlrpc_error(NULL, $exception->getMethod());
