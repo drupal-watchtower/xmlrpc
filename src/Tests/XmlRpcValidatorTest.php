@@ -64,10 +64,10 @@ class XmlRpcValidatorTest extends WebTestBase {
 
     $int_5     = mt_rand(-100, 100);
     $bool_5    = (($int_5 % 2) == 0);
-    $string_5  = $this->randomName();
+    $string_5  = $this->randomMachineName();
     $double_5  = (double)(mt_rand(-1000, 1000) / 100);
     $time_5    = REQUEST_TIME;
-    $base64_5  = $this->randomName(100);
+    $base64_5  = $this->randomMachineName(100);
     $l_res_5 = xmlrpc_test_manyTypesTest($int_5, $bool_5, $string_5, $double_5, xmlrpc_date($time_5), $base64_5);
     // See http://drupal.org/node/37766 why this currently fails
     $l_res_5[5] = $l_res_5[5]->data;
@@ -78,7 +78,7 @@ class XmlRpcValidatorTest extends WebTestBase {
     $size = mt_rand(100, 200);
     $array_6 = array();
     for ($i = 0; $i < $size; $i++) {
-      $array_6[] = $this->randomName(mt_rand(8, 12));
+      $array_6[] = $this->randomMachineName(mt_rand(8, 12));
     }
 
     $l_res_6 = xmlrpc_test_moderateSizeArrayCheck($array_6);
