@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Definition of Drupal\xmlrpc\Tests\XmlRpcValidatorTest.
+ * Contains \Drupal\xmlrpc\Tests\XmlRpcValidatorTest.
  */
 
 namespace Drupal\xmlrpc\Tests;
@@ -27,8 +27,8 @@ class XmlRpcValidatorTest extends WebTestBase {
   /**
    * Run validator1 tests.
    */
-  function testValidator() {
-    $xml_url = url('xmlrpc.php', array('absolute' => TRUE));
+  public function testValidator() {
+    $xml_url = \Drupal::url('xmlrpc.php', [], ['absolute' => TRUE]);
     srand();
     mt_srand();
 
