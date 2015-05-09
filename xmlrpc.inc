@@ -11,7 +11,7 @@
  * This version is made available under the GNU GPL License
  */
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use GuzzleHttp\Exception\RequestException;
 
 /**
@@ -123,7 +123,7 @@ function xmlrpc_value_get_xml($xmlrpc_value) {
     case 'struct':
       $return = '<struct>' . "\n";
       foreach ($xmlrpc_value->data as $name => $value) {
-        $return .= "  <member><name>" . String::checkPlain($name) . "</name><value>";
+        $return .= "  <member><name>" . SafeMarkup::checkPlain($name) . "</name><value>";
         $return .= xmlrpc_value_get_xml($value) . "</value></member>\n";
       }
       $return .= '</struct>';
