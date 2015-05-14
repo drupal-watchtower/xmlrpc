@@ -17,6 +17,8 @@ use GuzzleHttp\Exception\ClientException;
  */
 class XmlRpcBasicTest extends WebTestBase {
 
+  use XmlRpcTestTrait;
+
   /**
    * Modules to enable.
    *
@@ -38,8 +40,7 @@ class XmlRpcBasicTest extends WebTestBase {
     );
 
     // Invoke XML-RPC call to get list of methods.
-    $url = \Drupal::url('xmlrpc.php', [], ['absolute' => TRUE]);
-    $methods = xmlrpc($url, ['system.listMethods' => []]);
+    $methods = $this->xmlRpcGet(['system.listMethods' => []]);
 
     // Ensure that the minimum methods were found.
     $count = 0;
@@ -56,8 +57,7 @@ class XmlRpcBasicTest extends WebTestBase {
    * Ensure that system.methodSignature returns an array of signatures.
    */
   public function testMethodSignature() {
-    $url = \Drupal::url('xmlrpc.php', [], ['absolute' => TRUE]);
-    $signature = xmlrpc($url, ['system.methodSignature' => ['system.listMethods']]);
+    $signature = $this->xmlRpcGet(['system.methodSignature' => ['system.listMethods']]);
     $this->assert(is_array($signature) && !empty($signature) && is_array($signature[0]),
       'system.methodSignature returns an array of signature arrays.');
   }
@@ -94,8 +94,6 @@ class XmlRpcBasicTest extends WebTestBase {
    * Ensure that XML-RPC correctly handles XML Accept headers.
    */
   public function testAcceptHeaders() {
-    $url = \Drupal::url('xmlrpc.php', [], ['absolute' => TRUE]);
-
     $request_header_sets = array(
       // Default.
       'implicit' => array(),
@@ -109,7 +107,7 @@ class XmlRpcBasicTest extends WebTestBase {
 
     foreach ($request_header_sets as $accept => $headers) {
       try {
-        $methods = xmlrpc($url, ['system.listMethods' => []], $headers);
+        $methods = $this->xmlRpcGet(['system.listMethods' => []], $headers);
         $this->assertTrue(is_array($methods), strtr('@accept accept header is accepted', array('@accept' => $accept)));
       }
       catch (ClientException $e) {
